@@ -28,6 +28,15 @@ public class UserAccountController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity update(@RequestBody UserAccount userAccount) {
+        UserAccount savedUserAccount = userAccountService.update(userAccount);
+        if (savedUserAccount == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(userAccount, HttpStatus.OK);
+    }
+
     @GetMapping({"", "{id}"})
     public ResponseEntity getUser(@PathVariable(required = false) Integer id) {
         if (id != null) {
@@ -40,4 +49,6 @@ public class UserAccountController {
             return new ResponseEntity(userAccountService.getAll(), HttpStatus.OK);
         }
     }
+
+
 }

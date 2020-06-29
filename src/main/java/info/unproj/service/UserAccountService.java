@@ -29,6 +29,13 @@ public class UserAccountService {
         return null;
     }
 
+    public UserAccount update(UserAccount userAccount) {
+        if (userAccount.getId() != null && userAccountDAO.getOne(userAccount.getId()) != null) {
+            return userAccountDAO.save(userAccount);
+        }
+        return null;
+    }
+
     public List<UserAccount> getAll() {
         return userAccountDAO.findAll();
     }
