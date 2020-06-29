@@ -12,10 +12,10 @@ public class UserAccountDTO {
 
     private Integer id;
 
-    @JsonProperty("user")
+    @JsonProperty("userId")
     private Integer userId;
 
-    @JsonProperty("user")
+    @JsonProperty("userLogin")
     private Integer userLogin;
 
     private Integer userBalance;

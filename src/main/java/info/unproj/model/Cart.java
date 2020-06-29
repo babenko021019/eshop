@@ -23,4 +23,13 @@ public class Cart {
 
     @Column(name = "creation_time")
     private Long creationTime;
+
+    @Column(name = "status")
+    private CartStatus status;
+
+    public Cart(UserAccount userAccount, Long creationTime, CartStatus status) {
+        this.userAccount = userAccount;
+        this.creationTime = creationTime;
+        this.status = status;
+    }
 }

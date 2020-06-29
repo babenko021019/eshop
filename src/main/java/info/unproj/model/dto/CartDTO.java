@@ -12,10 +12,10 @@ public class CartDTO {
 
     private Integer id;
 
-    @JsonProperty("user")
+    @JsonProperty("userId")
     private Integer userId;
 
-    @JsonProperty("user")
+    @JsonProperty("userLogin")
     private Integer userLogin;
 
     @JsonProperty("userAccount")
@@ -23,4 +23,6 @@ public class CartDTO {
 
     @JsonProperty("time")
     private Long creationTime;
+
+    private String status;
 }
