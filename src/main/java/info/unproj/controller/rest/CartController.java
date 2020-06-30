@@ -28,8 +28,11 @@ public class CartController {
 
     @PutMapping
     public ResponseEntity save(@RequestBody String request) {
-        cartService.save(mapperUtil.toCart(mapperUtil.toCartDTO(request)));
-        return new ResponseEntity(HttpStatus.OK);
+        Cart savedCart = cartService.save(mapperUtil.toCart(mapperUtil.toCartDTO(request)));
+        if (savedCart == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(mapperUtil.toCartDTOFromCart(savedCart),HttpStatus.OK);
     }
 
     @GetMapping({"", "{id}"})
@@ -39,17 +42,17 @@ public class CartController {
             if (cart == null) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity(cart, HttpStatus.OK);
+            return new ResponseEntity(mapperUtil.toCartDTOFromCart(cart), HttpStatus.OK);
         } else {
-            return new ResponseEntity(cartService.getAll(), HttpStatus.OK);
+            return new ResponseEntity(mapperUtil.toCartDTOListFromCartList(cartService.getAll()), HttpStatus.OK);
         }
     }
 
     @PostMapping("update-status")
     public ResponseEntity updateStatus(@RequestBody String body) {
         Map<String, Object> map = new JacksonJsonParser().parseMap(body);
-        cartService.updateStatus((Integer) map.get("cartId"), CartStatus.valueOf((String) map.get("status")));
-        int updatedRows =  cartService.updateStatus((Integer) map.get("cartId"), CartStatus.valueOf((String) map.get("status")));
+        cartService.updateStatus((Integer) map.get("cartId"), CartStatus.valueOf((String) map.get("cartStatus")));
+        int updatedRows =  cartService.updateStatus((Integer) map.get("cartId"), CartStatus.valueOf((String) map.get("cartStatus")));
         if (updatedRows < 1) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

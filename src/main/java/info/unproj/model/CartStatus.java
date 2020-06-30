@@ -13,4 +13,8 @@ public enum CartStatus {
     CartStatus(String name) {
         this.name = name;
     }
+
+    public CartStatus getByValue(String value){
+        return CartStatus.valueOf(value);
+    }
 }

@@ -15,11 +15,11 @@ public class ItemService {
     ItemDAO itemDAO;
 
     public Item getById(Integer id) {
-        Optional<Item> cart = itemDAO.findById(id);
-        if (cart.isEmpty()) {
+        Optional<Item> item = itemDAO.findById(id);
+        if (item.isEmpty()) {
             return null;
         }
-        return cart.get();
+        return item.get();
     }
 
     public Item save(Item item) {
@@ -28,5 +28,12 @@ public class ItemService {
 
     public List<Item> getAll() {
         return itemDAO.findAll();
+    }
+
+    public Item update(Item item) {
+        if (item.getId() != null && itemDAO.getOne(item.getId()) != null) {
+            return itemDAO.save(item);
+        }
+        return null;
     }
 }

@@ -24,12 +24,12 @@ public class Cart {
     @Column(name = "creation_time")
     private Long creationTime;
 
-    @Column(name = "status")
-    private CartStatus status;
+    @Column(name = "cart_status")
+    private CartStatus cartStatus;
 
-    public Cart(UserAccount userAccount, Long creationTime, CartStatus status) {
+    public Cart(UserAccount userAccount, Long creationTime, CartStatus cartStatus) {
         this.userAccount = userAccount;
         this.creationTime = creationTime;
-        this.status = status;
+        this.cartStatus = cartStatus;
     }
 }

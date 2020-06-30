@@ -27,6 +27,15 @@ public class ItemController {
         return new ResponseEntity(item, HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity update(@RequestBody Item item) {
+        Item savedItem = itemService.update(item);
+        if (savedItem == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(item, HttpStatus.OK);
+    }
+
     @GetMapping({"", "{id}"})
     public ResponseEntity getItem(@PathVariable(required = false) Integer id) {
         if (id != null) {

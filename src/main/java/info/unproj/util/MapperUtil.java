@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class MapperUtil {
@@ -34,7 +36,6 @@ public class MapperUtil {
 
     @Autowired
     ObjectMapper objectMapper;
-
 
 
     public UserAccount toUserAccount(UserAccountDTO userAccountDTO) {
@@ -62,7 +63,7 @@ public class MapperUtil {
         cart.setUserAccount(userAccountDAO.getOne(cartDTO.getUserLogin()));
         cart.setUserAccount(userAccountDAO.getOne(cartDTO.getUserBalance()));
         cart.setCreationTime(cartDTO.getCreationTime());
-        cart.setStatus(CartStatus.valueOf(cartDTO.getStatus().toUpperCase()));
+        cart.setCartStatus(CartStatus.valueOf(cartDTO.getStatus().toUpperCase()));
         return cart;
     }
 
@@ -75,7 +76,25 @@ public class MapperUtil {
         return null;
     }
 
-    public Order  toOrder(OrderDTO orderDTO) {
+    public CartDTO toCartDTOFromCart(Cart cart) {
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(cart.getId());
+        cartDTO.setUserId(cart.getUserAccount().getId());
+        cartDTO.setCreationTime(cart.getCreationTime());
+        cartDTO.setStatus(cart.getCartStatus().name());
+        return cartDTO;
+    }
+
+    public List<CartDTO> toCartDTOListFromCartList(List<Cart> carts) {
+        List<CartDTO> cartDTOs = new ArrayList<>();
+        for (Cart each : carts) {
+            CartDTO cartDTO = toCartDTOFromCart(each);
+            cartDTOs.add(cartDTO);
+        }
+        return cartDTOs;
+    }
+
+    public Order toOrder(OrderDTO orderDTO) {
         Order order = new Order();
         order.setId(orderDTO.getId());
         order.setItem(itemService.getById(orderDTO.getItemId()));
@@ -91,5 +110,35 @@ public class MapperUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public OrderDTO toOrderDTOFromOrder(Order order) {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(order.getId());
+        orderDTO.setItemId(order.getItem().getId());
+        orderDTO.setCartId(order.getCart().getId());
+        orderDTO.setAmount(order.getAmount());
+        orderDTO.setItemName(order.getItem().getName());
+        orderDTO.setItemPrice(order.getItem().getPrice());
+        return orderDTO;
+    }
+
+    public String orderDTOFormat(Order order) {
+        OrderDTO orderDTO = toOrderDTOFromOrder(order);
+        return "{" + System.lineSeparator() +
+                "  \"" + "id" + "\" : " + orderDTO.getId() + "," + System.lineSeparator() +
+                "  \"" + "itemId" + "\" : " + orderDTO.getItemId() + "," + System.lineSeparator() +
+                "  \"" + "cartId" + "\" : " + orderDTO.getCartId() + "," + System.lineSeparator() +
+                "  \"" + "amount" + "\" : " + orderDTO.getAmount() + System.lineSeparator() +
+                "}";
+    }
+
+    public String orderDTOFormatList(List<Order> orders) {
+        List<String> list = new ArrayList<>();
+        for (Order each : orders) {
+            String string = System.lineSeparator() + orderDTOFormat(each);
+            list.add(string);
+        }
+        return list.toString();
     }
 }
